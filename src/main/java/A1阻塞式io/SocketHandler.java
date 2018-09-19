@@ -21,6 +21,7 @@ public class SocketHandler implements Runnable{
     }
 
     public void run() {
+//        分配空间进行读操作
         ByteBuffer buffer = ByteBuffer.allocate(1024);
         try {
 //            将请求数据读入Buffer中
@@ -28,6 +29,7 @@ public class SocketHandler implements Runnable{
 //            如果有数据
             while ((num = socketChannel.read(buffer))>0){
 //                读取Buffer内容之前先flip一下
+                // Buffer 切换为读模式
                 buffer.flip();
 
 //               加快读取速度
