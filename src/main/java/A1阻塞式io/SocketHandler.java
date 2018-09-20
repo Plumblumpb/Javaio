@@ -21,7 +21,7 @@ public class SocketHandler implements Runnable{
     }
 
     public void run() {
-//        分配空间进行读操作
+//      堆空间中分配缓冲区
         ByteBuffer buffer = ByteBuffer.allocate(1024);
         try {
 //            将请求数据读入Buffer中
@@ -42,6 +42,7 @@ public class SocketHandler implements Runnable{
                 System.out.println("收到请求："+result);
 
 //                回复客户端
+//                warp用于存放在byte数组
                 ByteBuffer writeBuffer = ByteBuffer.wrap(("我已经收到你的请求，你的请求内容是：" + result).getBytes());
                 socketChannel.write(writeBuffer);
 

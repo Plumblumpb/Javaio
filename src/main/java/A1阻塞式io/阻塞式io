@@ -1,0 +1,37 @@
+1.首先，每次来一个连接都开一个新的线程这肯定是不合适的。
+2.其次，阻塞操作在这里也是一个问题。首先，accept() 是一个阻塞操作，当 accept() 返回的时候，代表有一个连接可以使用了，我们这里是马上就新建线程来处理这个 SocketChannel 了，
+但是这里不代表对方就将数据传输过来了。所以，SocketChannel#read 方法将阻塞，等待数据，明显这个等待是不值得的。
+同理，write 方法也需要等待通道可写才能执行写入操作，这边的阻塞等待也是不值得的。
+
+
+创建流程
+server
+   1.ServerSocketChannel.open创建通道连接
+   2.InetSocketAddress(8080)开启端口
+   3.serversocketchannel.socket().bind(socketAddress)连接端口
+
+   4.serversocketchannel.accept()等待client数据
+   5.开启多线程接收
+
+   6.ByteBuffer.allocate(1024)分配缓冲区域
+   7.socketChannel.read(buffer）>0 判断通道是否有值
+   8.buffer.flip();切换为读模式
+   9.buffer.get(bytes)读取byte
+   10.转为String类型new String (bytes,"UTF-8")
+
+   11 ByteBuffer.wrap（）包装一个已有的数组
+   12 socketChannel.write(）进行写数据
+   13Buffer.clear清楚缓存。
+
+ client
+  1.SocketChannel.open()创建通道连接
+  2.InetSocketAddress("localhost",8080)创建ip和port连接
+  3.socketChannel.connect（）进行连接
+  4. ByteBuffer.wrap（）包装一个数据
+  5，socketChannel.write(buffer)写入数据，
+
+  6.ByteBuffer.allocate(1024)创建用于接收数据的ByteBuffer
+  7.socketChannel.read(readBuffer)判断是否有数据
+  8.readBuffer.flip()切换为读模式。
+  9.readBuffer.get()读取数据
+

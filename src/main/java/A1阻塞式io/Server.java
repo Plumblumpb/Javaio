@@ -1,6 +1,8 @@
 package A1阻塞式io;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 
@@ -11,14 +13,15 @@ import java.nio.channels.SocketChannel;
  * @Description:
  */
 public class Server {
-    public static void main(String[] args) {
-        try {
+    public static void main(String[] args) throws IOException {
 
 //        开启Socket
         ServerSocketChannel serversocketchannel = ServerSocketChannel.open();
 
+//        开启端口
+        SocketAddress  socketAddress = new InetSocketAddress(8080);
 //        监听8080 端口进来的tcp连接
-        serversocketchannel.socket().bind(new InetSocketAddress(8080));
+        serversocketchannel.socket().bind(socketAddress);
 
 //        开启循环监听
         while(true){
@@ -29,8 +32,6 @@ public class Server {
             SocketHandler handler = new SocketHandler(socketChannel);
             new Thread(handler).start();
         }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+
     }
 }
