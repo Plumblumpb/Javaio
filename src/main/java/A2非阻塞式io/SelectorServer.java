@@ -52,6 +52,7 @@ public class SelectorServer {
                 Iterator<SelectionKey> iterator = readyKey.iterator();
                 while(iterator.hasNext()){
                     SelectionKey key = iterator.next();
+//                    移除selectkey  或者selector.selectedKeys().remove(selectionKey);
                     iterator.remove();
 //                    if(key.isAcceptable()) {
 //                        // a connection was accepted by a ServerSocketChannel.
@@ -74,12 +75,13 @@ public class SelectorServer {
                         // 有数据可读
                         // 上面一个 if 分支中注册了监听 OP_READ 事件的 SocketChannel
                         SocketChannel socketChannel = (SocketChannel) key.channel();
-//                        创建缓存空间
+//                      创建缓存空间
                         ByteBuffer readBuffer = ByteBuffer.allocate(1024);
                         int num = socketChannel.read(readBuffer);
                         if (num > 0) {
                             // 处理进来的数据...
                             System.out.println("收到数据：" + new String(readBuffer.array()).trim());
+//                            创建和数据大小一致的byte
                             ByteBuffer buffer = ByteBuffer.wrap("返回给客户端的数据...".getBytes());
                             socketChannel.write(buffer);
                         } else if (num == -1) {

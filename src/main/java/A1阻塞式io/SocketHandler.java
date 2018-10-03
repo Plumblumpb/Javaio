@@ -43,6 +43,7 @@ public class SocketHandler implements Runnable{
 
 //                回复客户端
 //                warp用于存放在byte数组
+//                warp创建和内容大小一致的缓存区
                 ByteBuffer writeBuffer = ByteBuffer.wrap(("我已经收到你的请求，你的请求内容是：" + result).getBytes());
                 socketChannel.write(writeBuffer);
 
